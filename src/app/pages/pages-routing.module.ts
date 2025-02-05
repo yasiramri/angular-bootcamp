@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MasterUserComponent } from './master-user/master-user.component';
 import { TodosComponent } from './todos/todos.component';
+import { CategoryComponent } from './category/category.component';
 
 const routes: Routes = [
   {
-    path: 'master-user',
-    component: MasterUserComponent,
-  },
-  {
     path: 'todos',
     component: TodosComponent,
+  },
+  {
+    path: 'category',
+    component: CategoryComponent,
   },
 ];
 
