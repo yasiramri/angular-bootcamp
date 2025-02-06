@@ -4,6 +4,9 @@
       <h4 class="mb-0">Todos List</h4>
     </div>
     <div class="card-body table-responsive">
+      <button class="btn btn-success mb-3" (click)="addButton(modalAdd)">
+        Add Todo
+      </button>
       <table
         mat-table
         [dataSource]="userData"
@@ -61,6 +64,106 @@
             </button>
           </td>
         </ng-container>
+
+        <ng-template #modalAdd let-modal>
+          <div class="modal-header">ADD DATA</div>
+          <div class="modal-body">
+            ADD FORM
+            <form
+              [formGroup]="addForm"
+              (ngSubmit)="onSubmit()"
+              class="md-float-material"
+              autocomplete="off"
+            >
+              <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input
+                  class="form-control"
+                  id="title"
+                  type="text"
+                  placeholder="Application Name"
+                  required
+                  formControlName="title"
+                  [ngClass]="{ 'is-invalid': af['title'].errors }"
+                />
+                @if(af['title'].errors){
+                <div class="invalid-feedback" align="left">
+                  @if(af['title'].errors['required']){
+                  <div>Title is required</div>
+                  }
+                </div>
+                }
+              </div>
+              <div class="mb-3">
+                <label for="category_id" class="form-label">Category</label>
+                <select class="form-select" formControlName="category_id">
+                  <option value="" disabled selected>Select Category</option>
+                  <option
+                    *ngFor="let category of categoriesList"
+                    [value]="category.id"
+                  >
+                    {{ category.category }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    addForm.get('category_id')?.invalid &&
+                    addForm.get('category_id')?.touched
+                  "
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="addForm.get('category_id')?.errors?.['required']">
+                    Category is required
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input
+                  class="form-control"
+                  id="description"
+                  type="text"
+                  placeholder="Description Project"
+                  required
+                  formControlName="description"
+                  [ngClass]="{ 'is-invalid': af['description'].errors }"
+                />
+                @if(af['description'].errors){
+                <div class="invalid-feedback" align="left">
+                  @if(af['description'].errors['required']){
+                  <div>Description is required</div>
+                  }
+                </div>
+                }
+              </div>
+              <div class="mb-3">
+                <label for="progress" class="form-label">Progress</label>
+                <input
+                  class="form-control"
+                  id="progress"
+                  type="text"
+                  placeholder="Progress"
+                  required
+                  formControlName="progress"
+                  [ngClass]="{ 'is-invalid': af['progress'].errors }"
+                />
+                @if(af['progress'].errors){
+                <div class="invalid-feedback" align="left">
+                  @if(af['progress'].errors['required']){
+                  <div>Progress is required</div>
+                  }
+                </div>
+                }
+              </div>
+              <div class="mb-2 mt-4">
+                <button class="btn btn-success w-100" type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </ng-template>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
