@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 
 export interface Category {
   id: number;
@@ -23,12 +29,22 @@ export class CategoryComponent implements OnInit {
     'created_at',
     'updated_at',
     'deleted_at',
+    'actions',
   ];
 
-  constructor(private categoryService: CategoryService) {}
+  modalAdd: any;
+
+  constructor(
+    private categoryService: CategoryService,
+    private modalService: NgbModal,
+    private formBuilder: UntypedFormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.getCategory();
+    this.addForm = this.formBuilder.group({
+      category: [null],
+    });
   }
 
   private getCategory() {
@@ -52,11 +68,11 @@ export class CategoryComponent implements OnInit {
 
     this.categoryService.updateCategory(category.id, updateCategory).subscribe(
       (updated) => {
-        console.log('Updated Todo:', updated);
-        this.getCategory(); // Reload the todos after update
+        console.log('Updated Category:', updated);
+        this.getCategory();
       },
       (error) => {
-        console.error('Error updating todo', error);
+        console.error('Error updating category', error);
       }
     );
   }
@@ -73,6 +89,29 @@ export class CategoryComponent implements OnInit {
           console.error('Error deleting todo', error);
         }
       );
+    }
+  }
+
+  addButton(content: any) {
+    this.modalService.open(content, { size: 'xl', centered: true });
+  }
+
+  addForm!: UntypedFormGroup;
+  get af() {
+    return this.addForm.controls;
+  }
+
+  onSubmit() {
+    this.addForm.markAllAsTouched();
+
+    if (this.addForm.valid) {
+      console.log(this.addForm.value);
+      this.categoryService
+        .createData(this.addForm.value)
+        .subscribe((data: any) => {
+          this.modalService.dismissAll();
+          this.ngOnInit();
+        });
     }
   }
 }

@@ -4,6 +4,9 @@
       <h4 class="mb-0">Category List</h4>
     </div>
     <div class="card-body table-responsive">
+      <button class="btn btn-success mb-3" (click)="addButton(modalAdd)">
+        Add Data
+      </button>
       <table
         mat-table
         [dataSource]="userData"
@@ -32,6 +35,63 @@
           <th mat-header-cell *matHeaderCellDef>Deleted by</th>
           <td mat-cell *matCellDef="let element">{{ element.deleted_at }}</td>
         </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Update Button -->
+            <button class="btn btn-primary btn-sm" (click)="onUpdate(element)">
+              Update
+            </button>
+
+            <!-- Delete Button -->
+            <button
+              class="btn btn-danger btn-sm ml-2"
+              (click)="onDelete(element.id)"
+            >
+              Delete
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-template #modalAdd let-modal>
+          <div class="modal-header">ADD DATA</div>
+          <div class="modal-body">
+            ADD FORM
+            <form
+              [formGroup]="addForm"
+              (ngSubmit)="onSubmit()"
+              class="md-float-material"
+              autocomplete="off"
+            >
+              <div class="mb-3">
+                <label for="category" class="form-label">Title</label>
+                <input
+                  class="form-control"
+                  id="category"
+                  type="text"
+                  placeholder="Application Name"
+                  required
+                  formControlName="category"
+                  [ngClass]="{ 'is-invalid': af['category'].errors }"
+                />
+                @if(af['category'].errors){
+                <div class="invalid-feedback" align="left">
+                  @if(af['category'].errors['required']){
+                  <div>Title is required</div>
+                  }
+                </div>
+                }
+              </div>
+              <div class="mb-2 mt-4">
+                <button class="btn btn-success w-100" type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </ng-template>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
