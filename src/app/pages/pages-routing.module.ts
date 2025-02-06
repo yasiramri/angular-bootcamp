@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TodosComponent } from './todos/todos.component';
 import { CategoryComponent } from './category/category.component';
-import { EditTodoComponent } from './edit-todo/edit-todo.component';
+import { EditTodoComponent } from './todos/edit-todo/edit-todo.component';
 
 const routes: Routes = [
   {
@@ -14,7 +14,7 @@ const routes: Routes = [
     component: CategoryComponent,
   },
   {
-    path: 'edit/:id',
+    path: 'todos/edit/:id',
     component: EditTodoComponent,
   },
 ];
