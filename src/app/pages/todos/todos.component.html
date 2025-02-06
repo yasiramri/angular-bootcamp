@@ -50,16 +50,19 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let todo">
-            <!-- Update Button -->
+            <!-- Edit Button with icon -->
             <button
-              class="btn btn-warning btn-sm ml-2"
-              [routerLink]="['/pages/edit', todo.id]"
+              class="btn btn-warning btn-sm ml-2 ms-4"
+              [routerLink]="['/pages/todos/edit', todo.id]"
             >
-              Edit
+              <i class="bi bi-pencil-square"></i> Edit
             </button>
 
-            <!-- Delete Button -->
-            <button class="btn btn-danger btn-sm" (click)="deleteTodo(todo.id)">
+            <!-- Delete Button with icon -->
+            <button
+              class="btn btn-danger btn-sm ms-2"
+              (click)="deleteTodo(todo.id)"
+            >
               <i class="bi bi-trash"></i> Delete
             </button>
           </td>

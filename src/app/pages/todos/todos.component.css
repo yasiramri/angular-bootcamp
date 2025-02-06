@@ -1,0 +1,11 @@
+/* Hover effect to create a lift effect */
+table.mat-elevation-z8 tr:hover {
+  background-color: #f1f1f1; /* Change this if you'd like a different hover color */
+  transform: translateY(-5px); /* Move the row up slightly */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow to give the lifted effect */
+}
+
+/* Optional: Smooth transition for transform and shadow */
+table.mat-elevation-z8 tr {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
