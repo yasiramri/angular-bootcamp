@@ -9,9 +9,10 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { TodosComponent } from './todos/todos.component';
 import { CategoryComponent } from './category/category.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditTodoComponent } from './edit-todo/edit-todo.component';
 
 @NgModule({
-  declarations: [TodosComponent, CategoryComponent],
+  declarations: [TodosComponent, CategoryComponent, EditTodoComponent],
   imports: [
     CommonModule,
     PagesRoutingModule,
