@@ -7,15 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { CategoryService } from '../services/category.service';
+import Swal from 'sweetalert2';
 
 export interface Todos {
-  id: number; // Assuming you have an ID for each todo
+  id: number;
   title: string;
   description: string;
   created_by: string;
   progress: number;
 }
-
 export interface Category {
   id: number;
   category: string;
@@ -27,7 +27,7 @@ export interface Category {
   styleUrls: ['./todos.component.css'],
 })
 export class TodosComponent implements OnInit {
-  userData: Todos[] = [];
+  todoData: Todos[] = [];
   categoriesList: Category[] = [];
   displayedColumns: string[] = [
     'title',
@@ -62,7 +62,7 @@ export class TodosComponent implements OnInit {
   private getTodos() {
     this.todoService.getTodos().subscribe(
       (res) => {
-        this.userData = res.data; // Assuming 'data' contains the list of todos
+        this.todoData = res.data; // Assuming 'data' contains the list of todos
         console.log(res);
       },
       (error) => {
@@ -103,21 +103,6 @@ export class TodosComponent implements OnInit {
     );
   }
 
-  // Delete a todo item
-  onDelete(id: number) {
-    if (confirm('Are you sure you want to delete this todo?')) {
-      this.todoService.deleteTodo(id).subscribe(
-        () => {
-          console.log('Deleted Todo with ID:', id);
-          this.getTodos(); // Reload the todos after deletion
-        },
-        (error) => {
-          console.error('Error deleting todo', error);
-        }
-      );
-    }
-  }
-
   addButton(content: any) {
     this.modalService.open(content, { size: 'xl', centered: true });
   }
@@ -135,41 +120,72 @@ export class TodosComponent implements OnInit {
     this.addForm.markAllAsTouched();
 
     if (this.addForm.valid) {
-      let requestData = this.addForm.value;
-      console.log(this.addForm.value);
       const formData = this.addForm.value;
       formData.category_id = parseInt(formData.category_id, 10);
       formData.progress = parseInt(formData.progress, 10);
       console.log(formData);
-      this.todoService.createData(this.addForm.value).subscribe((data: any) => {
-        this.modalService.dismissAll();
-        this.ngOnInit();
-      });
-      this.restApiService.createData(requestData).subscribe({
+
+      // Use TodoService's createData method to create a new todo
+      this.todoService.createData(formData).subscribe({
         next: (data: any) => {
-          console.log('Response dari backend:', data);
+          console.log('Response from backend:', data);
+
+          // Display SweetAlert for success
+          Swal.fire({
+            icon: 'success',
+            title: 'Todo Created!',
+            text: 'Your new todo has been successfully created.',
+            showConfirmButton: false,
+            timer: 1500, // Show for 1.5 seconds before auto-close
+          });
+
+          // Reset form and update UI after successful creation
           this.addForm.reset();
           this.modalService.dismissAll();
-          this.getTodos();
+          this.getTodos(); // Update the list of todos
+          this.ngOnInit(); // Re-initialize component
         },
         error: (error: any) => {
-          console.error('Terjadi error:', error);
+          console.error('Error occurred:', error);
+
+          // Display SweetAlert for error
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'An error occurred while creating the todo.',
+            showConfirmButton: true,
+          });
         },
       });
     }
   }
 
-  deleteUser(userId: number) {
-    if (confirm('Are you sure you want to delete this user?')) {
-      this.restApiService.deleteTodo(userId).subscribe({
-        next: () => {
-          console.log('User deleted successfully');
-          this.getTodos(); // Refresh Data
-        },
-        error: (error) => {
-          console.error('Error deleting user:', error);
-        },
-      });
-    }
+  deleteTodo(todoId: number) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to delete this todo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.todoService.deleteTodo(todoId).subscribe({
+          next: () => {
+            Swal.fire('Deleted!', 'Your todo has been deleted.', 'success');
+            this.getTodos(); // Refresh Data
+          },
+          error: (error) => {
+            Swal.fire(
+              'Error!',
+              'There was an issue deleting your todo.',
+              'error'
+            );
+            console.error('Error deleting todo:', error);
+          },
+        });
+      }
+    });
   }
 }
