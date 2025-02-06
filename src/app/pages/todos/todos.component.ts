@@ -122,6 +122,10 @@ export class TodosComponent implements OnInit {
     this.modalService.open(content, { size: 'xl', centered: true });
   }
 
+  putButton(content: any) {
+    this.modalService.open(content, { size: 'xl', centered: true });
+  }
+
   addForm!: UntypedFormGroup;
   get af() {
     return this.addForm.controls;
