@@ -1,52 +1,67 @@
-<div class="container mt-4">
-  <h3 class="text-primary text-center">Edit User</h3>
-  <form [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
-    <div class="mb-3">
-      <label for="title" class="form-label">Title</label>
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        formControlName="title"
-      />
+<div class="container mt-4 mb-4">
+  <div class="card shadow-lg">
+    <div class="card-header bg-dark text-white">
+      <h4 class="mb-0">Edit Todo</h4>
     </div>
+    <div class="card-body">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
+        <!-- Title Field -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            formControlName="title"
+            placeholder="Enter title"
+          />
+        </div>
 
-    <!-- 🔥 Dropdown Kategori (Dinamis dari Database) -->
-    <div class="mb-3">
-      <label for="category_id" class="form-label">Category</label>
-      <div class="position-relative">
-        <ng-select
-          class="form-control"
-          [items]="categoriesList"
-          bindLabel="category"
-          bindValue="id"
-          formControlName="category_id"
-          placeholder="Select Category"
-          [searchable]="true"
-        >
-        </ng-select>
-      </div>
+        <!-- Category Dropdown -->
+        <div class="mb-3">
+          <label for="category_id" class="form-label">Category</label>
+          <div class="position-relative">
+            <ng-select
+              class="form-control"
+              [items]="categoriesList"
+              bindLabel="category"
+              bindValue="id"
+              formControlName="category_id"
+              placeholder="Select Category"
+              [searchable]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <!-- Description Field -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            formControlName="description"
+            placeholder="Enter description"
+          ></textarea>
+        </div>
+
+        <!-- Progress Field -->
+        <div class="mb-3">
+          <label for="progress" class="form-label">Progress</label>
+          <input
+            type="number"
+            class="form-control"
+            id="progress"
+            formControlName="progress"
+            placeholder="Enter progress percentage"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mb-2 mt-4">
+          <button type="submit" class="btn btn-success w-100">Update</button>
+        </div>
+      </form>
     </div>
-
-    <div class="mb-3">
-      <label for="description" class="form-label">Description</label>
-      <textarea
-        class="form-control"
-        id="description"
-        formControlName="description"
-      ></textarea>
-    </div>
-
-    <div class="mb-3">
-      <label for="progress" class="form-label">Progress</label>
-      <input
-        type="number"
-        class="form-control"
-        id="progress"
-        formControlName="progress"
-      />
-    </div>
-
-    <button type="submit" class="btn btn-success w-100">Update</button>
-  </form>
+  </div>
 </div>
