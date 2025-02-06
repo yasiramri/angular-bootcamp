@@ -20,11 +20,6 @@ export class TodoService {
     return this.http.get(this.apiUrl + '/todos/' + id);
   }
 
-  // Add a new todo
-  addTodo(todo: any): Observable<any> {
-    return this.http.post(this.apiUrl + '/todos', todo);
-  }
-
   // Update an existing todo
   updateTodo(id: number, todo: any): Observable<any> {
     return this.http.put(this.apiUrl + '/todos/' + id, todo, httpOptions);
@@ -32,7 +27,7 @@ export class TodoService {
 
   // Delete a todo by ID
   deleteTodo(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/todos/${id}`, httpOptions);
+    return this.http.delete(this.apiUrl + '/todos/' + id, httpOptions);
   }
 
   createData(data: any): Observable<any> {
