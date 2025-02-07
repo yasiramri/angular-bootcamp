@@ -13,6 +13,7 @@ export interface Todos {
   id: number;
   title: string;
   description: string;
+  category_id: number;
   created_by: string;
   progress: number;
 }
@@ -29,8 +30,10 @@ export interface Category {
 export class TodosComponent implements OnInit {
   todoData: Todos[] = [];
   categoriesList: Category[] = [];
+  combinedData = [...this.todoData, this.categoriesList];
   displayedColumns: string[] = [
     'title',
+    'category_name',
     'description',
     'created_by',
     'progress',
@@ -43,13 +46,13 @@ export class TodosComponent implements OnInit {
     private todoService: TodoService,
     private categoryService: CategoryService,
     private modalService: NgbModal,
-    private formBuilder: UntypedFormBuilder,
-    private restApiService: TodoService
+    private formBuilder: UntypedFormBuilder
   ) {}
 
   ngOnInit(): void {
     this.getTodos();
     this.getCategory();
+    this.updateCombinedData();
     this.addForm = this.formBuilder.group({
       title: [null, [Validators.required]],
       category_id: [null],
@@ -62,7 +65,8 @@ export class TodosComponent implements OnInit {
   private getTodos() {
     this.todoService.getTodos().subscribe(
       (res) => {
-        this.todoData = res.data; // Assuming 'data' contains the list of todos
+        this.todoData = res.data;
+        this.updateCombinedData();
         console.log(res);
       },
       (error) => {
@@ -74,12 +78,27 @@ export class TodosComponent implements OnInit {
   private getCategory() {
     this.categoryService.getCategory().subscribe({
       next: (data) => {
-        this.categoriesList = data.data; // 🔥 Simpan kategori ke array
+        this.categoriesList = data.data;
+        this.updateCombinedData();
         console.log('Categories:', this.categoriesList);
       },
       error: (error) => {
         console.error('Error fetching categories:', error);
       },
+    });
+  }
+
+  private updateCombinedData() {
+    // Gabungkan todoData dengan kategori berdasarkan category_id
+    this.combinedData = this.todoData.map((todo) => {
+      // Mencari kategori berdasarkan category_id
+      const category = this.categoriesList.find(
+        (cat) => cat.id === todo.category_id
+      );
+      return {
+        ...todo,
+        category_name: category ? category.category : 'Unknown',
+      }; // Menggunakan 'category_name' untuk nama kategori
     });
   }
 
