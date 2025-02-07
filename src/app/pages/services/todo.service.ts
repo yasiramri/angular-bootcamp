@@ -15,6 +15,10 @@ export class TodoService {
     return this.http.get(this.apiUrl + '/todos');
   }
 
+  getCategory(): Observable<any> {
+    return this.http.get(this.apiUrl + '/category');
+  }
+
   // Get Todo by Id
   getTodoById(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/todos/' + id);
@@ -39,6 +43,6 @@ const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization:
-      'Berear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5fZG9lIiwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTczODgwNzIxOSwiZXhwIjoxNzM4ODkzNjE5fQ.uJjhCuiPZJil_B4ts8BBG0TVCSBHNR_AvEw-doTYQZQ',
+      'Berear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5fZG9lIiwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTczODg5NzA5MSwiZXhwIjoxNzM4OTgzNDkxfQ.9n1pvQN6W9TtXt1x74_QVZA5k_z_y9WyDNFIaDsfdkU',
   }),
 };
