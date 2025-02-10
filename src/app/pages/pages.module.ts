@@ -4,6 +4,7 @@ import { MatTableModule } from '@angular/material/table';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 import { PagesRoutingModule } from './pages-routing.module';
 import { TodosComponent } from './todos/todos.component';
@@ -21,6 +22,7 @@ import { EditTodoComponent } from './todos/edit-todo/edit-todo.component';
     ReactiveFormsModule,
     NgSelectModule,
     FormsModule,
+    NgApexchartsModule,
   ],
 })
 export class PagesModule {}

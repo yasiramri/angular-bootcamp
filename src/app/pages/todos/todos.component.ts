@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Chart, registerables } from 'chart.js';
 import { TodoService } from '../services/todo.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -30,6 +31,7 @@ export interface Category {
 export class TodosComponent implements OnInit {
   todoData: Todos[] = [];
   categoriesList: Category[] = [];
+  chart: any;
   combinedData = [...this.todoData, this.categoriesList];
   displayedColumns: string[] = [
     'title',
@@ -47,7 +49,9 @@ export class TodosComponent implements OnInit {
     private categoryService: CategoryService,
     private modalService: NgbModal,
     private formBuilder: UntypedFormBuilder
-  ) {}
+  ) {
+    Chart.register(...registerables);
+  }
 
   ngOnInit(): void {
     this.getTodos();
@@ -61,11 +65,16 @@ export class TodosComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.createChart();
+  }
+
   // Fetch the todos from the backend
   private getTodos() {
     this.todoService.getTodos().subscribe(
       (res) => {
         this.todoData = res.data;
+        this.updateChartData();
         this.updateCombinedData();
         console.log(res);
       },
@@ -73,6 +82,43 @@ export class TodosComponent implements OnInit {
         console.error('Error fetching todos', error);
       }
     );
+  }
+
+  private createChart() {
+    const ctx = document.getElementById('todoChart') as HTMLCanvasElement;
+    this.chart = new Chart(ctx, {
+      type: 'bar', // Tipe chart
+      data: {
+        labels: this.todoData.map((todo) => todo.description), // Menggunakan judul todo sebagai label
+        datasets: [
+          {
+            label: 'Progress',
+            data: this.todoData.map((todo) => todo.progress), // Menggunakan progress sebagai data
+            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)'],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  }
+
+  private updateChartData() {
+    if (this.chart) {
+      this.chart.data.labels = this.todoData.map((todo) => todo.description);
+      this.chart.data.datasets[0].data = this.todoData.map(
+        (todo) => todo.progress
+      );
+      this.chart.update(); // Update chart with new data
+    }
   }
 
   private getCategory() {

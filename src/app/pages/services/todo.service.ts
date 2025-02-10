@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,6 +15,7 @@ export class TodoService {
     return this.http.get(this.apiUrl + '/todos');
   }
 
+  // Get Category
   getCategory(): Observable<any> {
     return this.http.get(this.apiUrl + '/category');
   }
@@ -34,8 +35,15 @@ export class TodoService {
     return this.http.delete(this.apiUrl + '/todos/' + id, httpOptions);
   }
 
+  // Create a new todo
   createData(data: any): Observable<any> {
     return this.http.post(this.apiUrl + '/todos', data, httpOptions);
+  }
+
+  // Search todos
+  searchTodos(query: string): Observable<any> {
+    const params = new HttpParams().set('query', query);
+    return this.http.get(this.apiUrl + '/todos/search', { params });
   }
 }
 
@@ -43,6 +51,6 @@ const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization:
-      'Berear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5fZG9lIiwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTczODg5NzA5MSwiZXhwIjoxNzM4OTgzNDkxfQ.9n1pvQN6W9TtXt1x74_QVZA5k_z_y9WyDNFIaDsfdkU',
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5fZG9lIiwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTczOTE1ODkwMiwiZXhwIjoxNzM5MjQ1MzAyfQ.Vc7ZjlJxhwo1dG6PKM4lC5IIc3OZR6urHNxPgHob96A',
   }),
 };
